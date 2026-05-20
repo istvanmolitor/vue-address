@@ -7,6 +7,14 @@ export interface Country {
   updated_at: string | null
 }
 
+export interface AddressFormData {
+  name: string
+  country_id: number | null
+  zip_code: string
+  city: string
+  address: string
+}
+
 export interface CountryListMeta {
   current_page: number
   last_page: number
