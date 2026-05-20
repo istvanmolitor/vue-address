@@ -14,19 +14,17 @@ import CardDescription from '@admin/components/ui/CardDescription.vue'
 import CardFooter from '@admin/components/ui/CardFooter.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
-import Select from '@admin/components/ui/Select.vue'
+import CountrySelect from '../components/CountrySelect.vue'
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { cityApi } from '../services/cityApi'
-import { countryApi } from '../services/countryApi'
-import type { City, CityPayload, Country } from '../types'
+import type { City, CityPayload } from '../types'
 
 const router = useRouter()
 const route = useRoute()
 const isLoading = ref(true)
 const isSaving = ref(false)
 const errors = ref<Record<string, string[]>>({})
-const countries = ref<Country[]>([])
 
 const form = reactive<CityPayload>({
   country_id: 0,
@@ -37,21 +35,10 @@ const form = reactive<CityPayload>({
 const isEditing = computed(() => Boolean(route.params.id))
 const cityId = computed(() => Number(route.params.id))
 
-const fetchCountries = async (): Promise<void> => {
-  try {
-    const response = await countryApi.list({ per_page: 999 })
-    countries.value = response.data ?? []
-  } catch (error) {
-    console.error('Hiba az országok betöltésekor:', error)
-    toastService.error('Hiba történt az országok betöltése során.')
-  }
-}
-
 const fetchFormData = async (): Promise<void> => {
   try {
     isLoading.value = true
 
-    await fetchCountries()
 
     if (isEditing.value) {
       const response = await cityApi.edit(cityId.value)
@@ -140,10 +127,9 @@ onMounted(() => {
       <CardContent class="space-y-4">
         <div class="space-y-2">
           <Label for="country_id">Ország</Label>
-          <Select
+          <CountrySelect
             id="country_id"
             v-model.number="form.country_id"
-            :options="countries.map(c => ({ value: c.id, label: c.name || c.code }))"
             placeholder="Válassz egy országot"
           />
           <InputError :message="errors.country_id" />
