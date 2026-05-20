@@ -22,6 +22,7 @@ export interface CountryPayload {
 
 export interface City {
   id: number
+  is_valid: boolean
   country_id: number
   country?: {
     id: number
@@ -40,6 +41,7 @@ export interface CityListMeta {
 }
 
 export interface CityPayload {
+  is_valid: boolean
   country_id: number
   name: string
   zip_code: string | null

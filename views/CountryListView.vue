@@ -20,7 +20,6 @@ const pagination = ref<PaginationMeta>({
 })
 
 const columns: Column<Country>[] = [
-  { key: 'id', label: 'ID', sortable: true, width: '80px' },
   { key: 'name', label: 'Név', sortable: false },
   { key: 'code', label: 'Kód', sortable: true, width: '140px' },
   { key: 'is_default', label: 'Alapértelmezett', sortable: true, width: '160px' },

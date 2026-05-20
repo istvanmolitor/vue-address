@@ -21,9 +21,8 @@ const pagination = ref<PaginationMeta>({
 })
 
 const columns: Column<City>[] = [
-  { key: 'id', label: 'ID', sortable: true, width: '80px' },
-  { key: 'name', label: 'Város', sortable: true },
   { key: 'country', label: 'Ország', sortable: false },
+  { key: 'name', label: 'Város', sortable: true },
   { key: 'zip_code', label: 'Irányítószám', sortable: true, width: '140px' },
 ]
 

@@ -8,6 +8,7 @@ import {
   Label,
   toastService,
 } from '@admin'
+import Checkbox from '@admin/components/ui/Checkbox.vue'
 import Card from '@admin/components/ui/Card.vue'
 import CardContent from '@admin/components/ui/CardContent.vue'
 import CardDescription from '@admin/components/ui/CardDescription.vue'
@@ -27,6 +28,7 @@ const isSaving = ref(false)
 const errors = ref<Record<string, string[]>>({})
 
 const form = reactive<CityPayload>({
+  is_valid: false,
   country_id: 0,
   name: '',
   zip_code: null,
@@ -34,6 +36,13 @@ const form = reactive<CityPayload>({
 
 const isEditing = computed(() => Boolean(route.params.id))
 const cityId = computed(() => Number(route.params.id))
+const zipCodeModel = computed({
+  get: () => form.zip_code ?? '',
+  set: (value: string | number) => {
+    const normalizedValue = String(value).trim()
+    form.zip_code = normalizedValue === '' ? null : normalizedValue
+  },
+})
 
 const fetchFormData = async (): Promise<void> => {
   try {
@@ -44,6 +53,7 @@ const fetchFormData = async (): Promise<void> => {
       const response = await cityApi.edit(cityId.value)
       const city: City = response.data
 
+      form.is_valid = Boolean(city.is_valid)
       form.country_id = city.country_id ?? 0
       form.name = city.name ?? ''
       form.zip_code = city.zip_code ?? null
@@ -65,6 +75,7 @@ const handleSubmit = async (): Promise<void> => {
     errors.value = {}
 
     const payload: CityPayload = {
+      is_valid: form.is_valid,
       country_id: form.country_id,
       name: form.name,
       zip_code: form.zip_code,
@@ -143,8 +154,13 @@ onMounted(() => {
 
         <div class="space-y-2">
           <Label for="zip_code">Irányítószám</Label>
-          <Input id="zip_code" v-model="form.zip_code" placeholder="1011" />
+          <Input id="zip_code" v-model="zipCodeModel" placeholder="1011" />
           <InputError :message="errors.zip_code" />
+        </div>
+
+        <div class="flex items-center gap-2">
+          <Checkbox id="is_valid" v-model="form.is_valid" />
+          <Label for="is_valid">Ellenörzött</Label>
         </div>
       </CardContent>
 
