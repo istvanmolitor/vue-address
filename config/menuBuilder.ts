@@ -23,6 +23,12 @@ export class AddressMenuBuilder extends MenuBuilder {
           path: '/admin/countries',
           order: 1,
         },
+        {
+          id: 'city-list',
+          title: 'Városok',
+          path: '/admin/cities',
+          order: 2,
+        },
       ],
     }
 

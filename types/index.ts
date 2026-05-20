@@ -20,3 +20,27 @@ export interface CountryPayload {
   is_default: boolean
 }
 
+export interface City {
+  id: number
+  country_id: number
+  country?: {
+    id: number
+    code: string
+    name: string
+  }
+  name: string | null
+  zip_code: string | null
+}
+
+export interface CityListMeta {
+  current_page: number
+  last_page: number
+  per_page: number
+  total: number
+}
+
+export interface CityPayload {
+  country_id: number
+  name: string
+  zip_code: string | null
+}
