@@ -15,10 +15,14 @@ import CardDescription from '@admin/components/ui/CardDescription.vue'
 import CardFooter from '@admin/components/ui/CardFooter.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
+import { normalizeTranslations } from '@language'
+import TranslationRepeaterVue from '@language/components/TranslationRepeater.vue'
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { countryApi } from '../services/countryApi'
 import type { CountryPayload } from '../types'
+
+const TranslationRepeater = TranslationRepeaterVue as any
 
 const router = useRouter()
 const route = useRoute()
@@ -28,7 +32,7 @@ const errors = ref<Record<string, string[]>>({})
 
 const form = reactive<CountryPayload>({
   code: '',
-  name: '',
+  translations: {},
   is_default: false,
 })
 
@@ -44,8 +48,8 @@ const fetchFormData = async (): Promise<void> => {
       const country = response.data
 
       form.code = country.code ?? ''
-      form.name = country.name ?? ''
       form.is_default = Boolean(country.is_default)
+      form.translations = normalizeTranslations(country.translations, ['name'])
     } else {
       await countryApi.create()
     }
@@ -65,7 +69,7 @@ const handleSubmit = async (): Promise<void> => {
 
     const payload: CountryPayload = {
       code: form.code,
-      name: form.name,
+      translations: form.translations,
       is_default: form.is_default,
     }
 
@@ -125,12 +129,6 @@ onMounted(() => {
 
       <CardContent class="space-y-4">
         <div class="space-y-2">
-          <Label for="name">Név</Label>
-          <Input id="name" v-model="form.name" placeholder="Magyarország" />
-          <InputError :message="errors.name" />
-        </div>
-
-        <div class="space-y-2">
           <Label for="code">Kód</Label>
           <Input id="code" v-model="form.code" placeholder="HU" />
           <InputError :message="errors.code" />
@@ -139,6 +137,19 @@ onMounted(() => {
         <div class="flex items-center gap-2">
           <Checkbox id="is_default" v-model="form.is_default" />
           <Label for="is_default">Alapértelmezett ország</Label>
+        </div>
+
+        <div class="space-y-4 border-t pt-4">
+          <h3 class="text-lg font-medium">Fordítások</h3>
+          <TranslationRepeater v-model="form.translations" :fields="['name']">
+            <template #default="{ language, translation }">
+              <div class="space-y-2">
+                <Label :for="`translation-name-${language.id}`">Név</Label>
+                <Input :id="`translation-name-${language.id}`" v-model="translation.name" placeholder="Magyarország" />
+                <InputError :message="errors[`translations.${language.id}.name`]" />
+              </div>
+            </template>
+          </TranslationRepeater>
         </div>
       </CardContent>
 
@@ -153,4 +164,3 @@ onMounted(() => {
     </Card>
   </AdminLayout>
 </template>
-

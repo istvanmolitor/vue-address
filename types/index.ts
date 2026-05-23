@@ -24,7 +24,7 @@ export interface CountryListMeta {
 
 export interface CountryPayload {
   code: string
-  name: string
+  translations: Record<number, { name: string }>
   is_default: boolean
 }
 
