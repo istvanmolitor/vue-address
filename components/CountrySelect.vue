@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { toastService } from '@admin'
+import Icon from '@admin/components/ui/Icon.vue'
 import { countryApi } from '../services/countryApi'
 import type { Country } from '../types'
 
@@ -81,12 +82,10 @@ onMounted(() => {
       class="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
       @click="isOpen = !isOpen"
     >
-      <span :class="modelValue ? 'text-foreground' : 'text-muted-foreground'">
-        {{ modelValue ? selectedLabel : placeholder }}
-      </span>
-      <svg class="h-4 w-4 opacity-50 ml-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-      </svg>
+       <span :class="modelValue ? 'text-foreground' : 'text-muted-foreground'">
+         {{ modelValue ? selectedLabel : placeholder }}
+       </span>
+       <Icon name="chevron-down" class="h-4 w-4 opacity-50 ml-2 shrink-0" />
     </button>
 
     <div
@@ -115,16 +114,8 @@ onMounted(() => {
           @click="selectCountry(country)"
           @keydown.enter="selectCountry(country)"
         >
-          <span>{{ country.name || country.code }}</span>
-          <svg
-            v-if="modelValue === country.id"
-            class="h-4 w-4 shrink-0"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg>
+           <span>{{ country.name || country.code }}</span>
+           <Icon v-if="modelValue === country.id" name="check" class="h-4 w-4 shrink-0" />
         </button>
       </div>
     </div>
