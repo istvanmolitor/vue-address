@@ -16,18 +16,21 @@ export class AddressMenuBuilder extends MenuBuilder {
       title: 'Címek',
       icon: MapPinned,
       order: 36,
+      permission: 'country',
       children: [
         {
           id: 'country-list',
           title: 'Országok',
           path: '/admin/countries',
           order: 1,
+          permission: 'country',
         },
         {
           id: 'city-list',
           title: 'Városok',
           path: '/admin/cities',
           order: 2,
+          permission: 'country',
         },
       ],
     }
