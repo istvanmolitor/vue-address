@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { AdminLayout, BackButton, FormButtons, Input, InputError, Label, toastService, LoadingSpinner } from '@admin'
+import InputField from '@admin/components/ui/InputField.vue'
 import Checkbox from '@admin/components/ui/Checkbox.vue'
 import Card from '@admin/components/ui/Card.vue'
 import CardContent from '@admin/components/ui/CardContent.vue'
@@ -136,17 +137,9 @@ onMounted(() => {
           <InputError :message="errors.country_id" />
         </div>
 
-        <div class="space-y-2">
-          <Label for="name">Város neve</Label>
-          <Input id="name" v-model="form.name" placeholder="Budapest" />
-          <InputError :message="errors.name" />
-        </div>
+        <InputField id="name" label="Város neve" v-model="form.name" placeholder="Budapest" :errors="errors.name" />
 
-        <div class="space-y-2">
-          <Label for="zip_code">Irányítószám</Label>
-          <Input id="zip_code" v-model="zipCodeModel" placeholder="1011" />
-          <InputError :message="errors.zip_code" />
-        </div>
+        <InputField id="zip_code" label="Irányítószám" v-model="zipCodeModel" placeholder="1011" :errors="errors.zip_code" />
 
         <div class="flex items-center gap-2">
           <Checkbox id="is_valid" v-model="form.is_valid" />

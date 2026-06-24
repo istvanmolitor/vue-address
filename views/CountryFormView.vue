@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { AdminLayout, BackButton, FormButtons, Input, InputError, Label, toastService, LoadingSpinner } from '@admin'
+import InputField from '@admin/components/ui/InputField.vue'
 import Checkbox from '@admin/components/ui/Checkbox.vue'
 import Card from '@admin/components/ui/Card.vue'
 import CardContent from '@admin/components/ui/CardContent.vue'
@@ -118,11 +119,7 @@ onMounted(() => {
       </CardHeader>
 
       <CardContent class="space-y-4">
-        <div class="space-y-2">
-          <Label for="code">Kód</Label>
-          <Input id="code" v-model="form.code" placeholder="HU" />
-          <InputError :message="errors.code" />
-        </div>
+        <InputField id="code" label="Kód" v-model="form.code" placeholder="HU" :errors="errors.code" />
 
         <div class="flex items-center gap-2">
           <Checkbox id="is_default" v-model="form.is_default" />
