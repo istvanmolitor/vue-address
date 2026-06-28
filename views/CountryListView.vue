@@ -19,11 +19,7 @@ const pagination = ref<PaginationMeta>({
   total: 0,
 })
 
-const columns: Column<Country>[] = [
-  { key: 'name', label: 'Név', sortable: false },
-  { key: 'code', label: 'Kód', sortable: true, width: '140px' },
-  { key: 'is_default', label: 'Alapértelmezett', sortable: true, width: '160px' },
-]
+const columns = ref<Column[]>([])
 
 const fetchCountries = async (params: {
   search?: string
@@ -36,6 +32,7 @@ const fetchCountries = async (params: {
     const response = await countryApi.list(params)
     countries.value = response.data ?? []
     pagination.value = response.meta
+    columns.value = (response.columns ?? []) as Column[]
   } catch (error) {
     console.error('Hiba az országok betöltésekor:', error)
     toastService.error('Hiba történt az országok betöltése során.')

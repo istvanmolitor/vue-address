@@ -20,11 +20,7 @@ const pagination = ref<PaginationMeta>({
   total: 0,
 })
 
-const columns: Column<City>[] = [
-  { key: 'country', label: 'Ország', sortable: false },
-  { key: 'name', label: 'Város', sortable: true },
-  { key: 'zip_code', label: 'Irányítószám', sortable: true, width: '140px' },
-]
+const columns = ref<Column[]>([])
 
 const fetchCities = async (params: {
   search?: string
@@ -37,6 +33,7 @@ const fetchCities = async (params: {
     const response = await cityApi.list(params)
     cities.value = response.data ?? []
     pagination.value = response.meta
+    columns.value = (response.columns ?? []) as Column[]
   } catch (error) {
     console.error('Hiba a városok betöltésekor:', error)
     toastService.error('Hiba történt a városok betöltése során.')
